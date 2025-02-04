@@ -1,0 +1,20 @@
+{
+  "name": "tmp",
+  "version": "0.1.0",
+  "bin": {
+    "tmp": "bin/tmp.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "bun test",
+    "cdk": "bunx cdk"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.2.2",
+    "typescript": "~5.6.3"
+  },
+  "dependencies": {
+    "aws-cdk-lib": "2.177.0",
+    "constructs": "^10.0.0"
+  }
+}
