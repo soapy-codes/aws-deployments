@@ -5,7 +5,7 @@
     "tmp": "bin/tmp.js"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "bunx cdk synth",
     "test": "bun test",
     "cdk": "bunx cdk"
   },
