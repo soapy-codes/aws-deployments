@@ -1,6 +1,9 @@
-# Sample workflow to access AWS resources when workflow is tied to branch
-name: AWS example workflow
-on: push
+name: AWS CDK example workflow
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
 env:
   AWS_REGION: "us-east-2"
 # permission can be added at job level or workflow level
@@ -11,6 +14,12 @@ jobs:
   synth:
     runs-on: ubuntu-latest
     steps:
+      - uses: oven-sh/setup-bun@v2
+      - env:
+          EVENT_CONTEXT: ${{ toJSON(github.event) }}
+        run: |
+          echo $EVENT_CONTEXT
+
       - name: Git clone the repository
         uses: actions/checkout@v4
       - name: configure aws credentials
@@ -18,6 +27,9 @@ jobs:
         with:
           role-to-assume: ${{ secrets.ROLE_ARN }}
           aws-region: ${{ env.AWS_REGION }}
-      - name: Synthesize CloudFormation
+      - name: Install Dependencies
+        id: install
+        run: bun install
+      - name: Synthesize CloudFormation Template
         id: synth
         run: bun run build
