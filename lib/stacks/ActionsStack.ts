@@ -77,10 +77,8 @@ export class ActionsStack extends cdk.Stack {
         {
           StringEquals: {
             "token.actions.githubusercontent.com:aud": "sts.amazonaws.com",
-          },
-          StringLike: {
             "token.actions.githubusercontent.com:sub":
-              "repo:soapy-codes/aws-deployments:ref:refs/heads/env/*", // TODO this will need be dynamic
+              "repo:soapy-codes/aws-deployments:environment:development",
           },
         }
       ),
