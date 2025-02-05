@@ -2,7 +2,7 @@ name: AWS CDK example workflow
 on:
   push:
     branches:
-      - main
+      - "env/**"
   workflow_dispatch:
 # permission can be added at job level or workflow level
 permissions:
@@ -10,6 +10,7 @@ permissions:
   contents: read # This is required for actions/checkout
 jobs:
   synth:
+    environment: development
     env:
       CDK_DEFAULT_ACCOUNT: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
       CDK_DEFAULT_REGION: ${{ secrets.CDK_DEFAULT_REGION }}
