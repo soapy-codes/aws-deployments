@@ -80,6 +80,10 @@ export class ActionsStack extends cdk.Stack {
             "token.actions.githubusercontent.com:sub":
               "repo:soapy-codes/aws-deployments:ref:refs/heads/main", // TODO
           },
+          StringLike: {
+            "token.actions.githubusercontent.com:sub":
+              "repo:soapy-codes/aws-deployments:ref:refs/heads/env/*", // TODO
+          },
         }
       ),
       //   inlinePolicies: {
