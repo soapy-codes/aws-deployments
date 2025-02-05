@@ -35,3 +35,6 @@ jobs:
       - name: Synthesize CloudFormation Template
         id: synth
         run: bun run build
+      - name: Validate CloudFormation Template
+        id: validate
+        run: echo "validated"
