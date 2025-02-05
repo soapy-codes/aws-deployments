@@ -16,74 +16,79 @@ export class ActionsStack extends cdk.Stack {
       }
     );
 
-    const accessAnalyzerArtifactBucket = new s3.Bucket(
-      this,
-      "AccessAnalyzerArtifactBucket",
-      {
-        blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
-        encryption: s3.BucketEncryption.S3_MANAGED,
-        versioned: false, // this would be true in enterprise
-        removalPolicy: cdk.RemovalPolicy.DESTROY, // this would be RETAIN in enterprise
-        autoDeleteObjects: true, // this would be false in enterprise
-        minimumTLSVersion: 1.2,
-        enforceSSL: true,
-      }
-    );
+    // const accessAnalyzerArtifactBucket = new s3.Bucket(
+    //   this,
+    //   "AccessAnalyzerArtifactBucket",
+    //   {
+    //     blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
+    //     encryption: s3.BucketEncryption.S3_MANAGED,
+    //     versioned: false, // this would be true in enterprise
+    //     removalPolicy: cdk.RemovalPolicy.DESTROY, // this would be RETAIN in enterprise
+    //     autoDeleteObjects: true, // this would be false in enterprise
+    //     minimumTLSVersion: 1.2,
+    //     enforceSSL: true,
+    //   }
+    // );
 
-    const accessAnalyzerPermissionsPolicy = new iam.PolicyDocument({
-      statements: [
-        new iam.PolicyStatement({
-          actions: [
-            "iam:GetPolicy",
-            "iam:GetPolicyVersion",
-            "access-analyzer:ListAnalyzers",
-            "access-analyzer:ValidatePolicy",
-            "access-analyzer:CreateAccessPreview",
-            "access-analyzer:GetAccessPreview",
-            "access-analyzer:ListAccessPreviewFindings",
-            "access-analyzer:CreateAnalyzer",
-            "access-analyzer:CheckAccessNotGranted",
-            "access-analyzer:CheckNoNewAccess",
-            "s3:ListAllMyBuckets",
-            "cloudformation:ListExports",
-            "ssm:GetParameter",
-            "cloudformation:CreateStack",
-            "cloudformation:DescribeStacks",
-            "cloudformation:CreateChangeSet",
-            "cloudformation:DescribeChangeSet",
-            "cloudformation:DeleteChangeSet",
-            "cloudformation:ExecuteChangeSet",
-            "iam:CreateRole",
-            "iam:PutRolePolicy",
-          ],
-          effect: iam.Effect.ALLOW,
-          resources: ["*"],
-        }),
-        new iam.PolicyStatement({
-          actions: ["s3:ListObjects", "s3:GetObject", "s3:PutObject"],
-          effect: iam.Effect.ALLOW,
-          resources: [
-            accessAnalyzerArtifactBucket.arnForObjects("*"),
-            accessAnalyzerArtifactBucket.bucketArn,
-          ],
-        }),
-      ],
-      assignSids: true,
-    });
+    // const accessAnalyzerPermissionsPolicy = new iam.PolicyDocument({
+    //   statements: [
+    //     new iam.PolicyStatement({
+    //       actions: [
+    //         "iam:GetPolicy",
+    //         "iam:GetPolicyVersion",
+    //         "access-analyzer:ListAnalyzers",
+    //         "access-analyzer:ValidatePolicy",
+    //         "access-analyzer:CreateAccessPreview",
+    //         "access-analyzer:GetAccessPreview",
+    //         "access-analyzer:ListAccessPreviewFindings",
+    //         "access-analyzer:CreateAnalyzer",
+    //         "access-analyzer:CheckAccessNotGranted",
+    //         "access-analyzer:CheckNoNewAccess",
+    //         "s3:ListAllMyBuckets",
+    //         "cloudformation:ListExports",
+    //         "ssm:GetParameter",
+    //         "cloudformation:CreateStack",
+    //         "cloudformation:DescribeStacks",
+    //         "cloudformation:CreateChangeSet",
+    //         "cloudformation:DescribeChangeSet",
+    //         "cloudformation:DeleteChangeSet",
+    //         "cloudformation:ExecuteChangeSet",
+    //         "iam:CreateRole",
+    //         "iam:PutRolePolicy",
+    //       ],
+    //       effect: iam.Effect.ALLOW,
+    //       resources: ["*"],
+    //     }),
+    //     new iam.PolicyStatement({
+    //       actions: ["s3:ListObjects", "s3:GetObject", "s3:PutObject"],
+    //       effect: iam.Effect.ALLOW,
+    //       resources: [
+    //         accessAnalyzerArtifactBucket.arnForObjects("*"),
+    //         accessAnalyzerArtifactBucket.bucketArn,
+    //       ],
+    //     }),
+    //   ],
+    //   assignSids: true,
+    // });
 
     const roleForGitHubActions = new iam.Role(this, "RoleForGitHubActions", {
       assumedBy: new iam.WebIdentityPrincipal(
         oidcProvider.openIdConnectProviderArn,
         {
-          StringLike: {
-            "token.actions.githubusercontent.com:sub": "repo:soapy-codes/*", // TODO
+          StringEquals: {
+            "token.actions.githubusercontent.com:aud": "sts.amazonaws.com",
+            "token.actions.githubusercontent.com:sub":
+              "repo:soapy-codes/aws-deployments", // TODO
           },
         }
       ),
-      inlinePolicies: {
-        AccessAnalyzerPermissionsPolicy: accessAnalyzerPermissionsPolicy,
-      },
-      roleName: "GitHubActionsIAMAccessAnalzer",
+      //   inlinePolicies: {
+      //     AccessAnalyzerPermissionsPolicy: accessAnalyzerPermissionsPolicy,
+      //   },
+      managedPolicies: [
+        iam.ManagedPolicy.fromAwsManagedPolicyName("AdministratorAccess"),
+      ],
+      roleName: "github-role",
     });
   }
 }

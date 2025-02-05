@@ -1,0 +1,23 @@
+# Sample workflow to access AWS resources when workflow is tied to branch
+name: AWS example workflow
+on: push
+env:
+  AWS_REGION: "us-east-2"
+# permission can be added at job level or workflow level
+permissions:
+  id-token: write # This is required for requesting the JWT
+  contents: read # This is required for actions/checkout
+jobs:
+  synth:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Git clone the repository
+        uses: actions/checkout@v4
+      - name: configure aws credentials
+        uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502
+        with:
+          role-to-assume: ${{ secrets.ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+      - name: Synthesize CloudFormation
+        id: synth
+        run: bun run build
