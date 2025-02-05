@@ -4,14 +4,15 @@ on:
     branches:
       - main
   workflow_dispatch:
-env:
-  AWS_REGION: "us-east-2"
 # permission can be added at job level or workflow level
 permissions:
   id-token: write # This is required for requesting the JWT
   contents: read # This is required for actions/checkout
 jobs:
   synth:
+    env:
+      CDK_DEFAULT_ACCOUNT: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
+      CDK_DEFAULT_REGION: ${{ secrets.CDK_DEFAULT_REGION }}
     runs-on: ubuntu-latest
     steps:
       - uses: oven-sh/setup-bun@v2
