@@ -13,7 +13,7 @@ jobs:
     env:
       CDK_DEFAULT_ACCOUNT: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
       CDK_DEFAULT_REGION: ${{ secrets.CDK_DEFAULT_REGION }}
-      AWS_REGION: ${{ vars.CDK_DEFAULT_REGION }}
+      AWS_REGION: ${{ secrets.CDK_DEFAULT_REGION }}
     runs-on: ubuntu-latest
     steps:
       - uses: oven-sh/setup-bun@v2
