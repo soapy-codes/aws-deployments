@@ -38,3 +38,6 @@ jobs:
       - name: Validate CloudFormation Template
         id: validate
         run: echo "validated"
+      - name: Deploy CloudFormation Template
+        id: deploy
+        run: bun run deploy
