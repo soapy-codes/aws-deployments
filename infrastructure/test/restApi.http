@@ -1,0 +1,11 @@
+@URL=https://h10zu9r6ic.execute-api.us-east-2.amazonaws.com/prod/
+
+POST {{URL}} HTTP/1.1
+Content-Type: application/json
+Accept: application/json
+
+{
+    "sourceLang": "en",
+    "targetLang": "es",
+    "sourceText": "chubby puppy"
+}

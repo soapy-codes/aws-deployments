@@ -1,21 +1,14 @@
 {
-  "name": "tmp",
-  "version": "0.1.0",
-  "bin": {
-    "tmp": "bin/tmp.js"
-  },
+  "name": "soapy-codes",
+  "version": "1.0.0",
+  "workspaces": [
+    "frontend",
+    "infrastructure",
+    "packages/shared-types",
+    "packages/lambda/translate"
+  ],
   "scripts": {
-    "build": "bunx cdk synth",
-    "test": "bun test",
-    "deploy": "bunx cdk deploy --require-approval never",
-    "cdk": "bunx cdk"
-  },
-  "devDependencies": {
-    "@types/bun": "^1.2.2",
-    "typescript": "~5.6.3"
-  },
-  "dependencies": {
-    "aws-cdk-lib": "2.177.0",
-    "constructs": "^10.0.0"
+    "frontend": "npm run dev --workspace frontend",
+    "deploy": "cd infrastructure; npx cdk deploy --require-approval never ApiStack --profile development"
   }
 }
