@@ -8,3 +8,8 @@ export interface TranslateResponse {
   timestamp: string;
   targetText: string;
 }
+
+export type TranslateDbObject = TranslateRequest &
+  TranslateResponse & {
+    requestId: string;
+  };

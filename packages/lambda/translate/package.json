@@ -3,8 +3,12 @@
   "version": "1.0.0",
   "main": "index.ts",
   "devDependencies": {
+    "@a2t/shared-types": "*",
+    "@aws-sdk/client-dynamodb": "^3.743.0",
+    "@aws-sdk/client-translate": "^3.743.0",
+    "@aws-sdk/util-dynamodb": "^3.743.0",
+    "@types/aws-lambda": "^8.10.147",
     "@types/node": "22.7.9",
-    "ts-node": "^10.9.2",
-    "@a2t/shared-types": "*"
+    "ts-node": "^10.9.2"
   }
 }

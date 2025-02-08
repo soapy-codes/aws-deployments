@@ -10,5 +10,8 @@
   "scripts": {
     "frontend": "npm run dev --workspace frontend",
     "deploy": "cd infrastructure; npx cdk deploy --require-approval never ApiStack --profile development"
+  },
+  "devDependencies": {
+    "@aws-sdk/client-dynamodb": "^3.743.0"
   }
 }

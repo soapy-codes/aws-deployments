@@ -9,3 +9,9 @@ Accept: application/json
     "targetLang": "es",
     "sourceText": "chubby puppy"
 }
+
+###
+
+GET {{URL}} HTTP/1.1
+Content-Type: application/json
+Accept: "application/json"
