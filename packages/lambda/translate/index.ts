@@ -7,6 +7,7 @@ import {
   TranslateRequest,
   TranslateResponse,
 } from "../../shared-types/src";
+import { gateway } from "/opt/nodejs/utils-lambda-layer";
 
 const translateClient = new clientTranslate.TranslateClient({
   region: "us-east-2",
@@ -26,10 +27,10 @@ if (!TRANSLATION_PARTITION_KEY) {
   throw new Error("TRANSLATION_PARTITION_KEY was not defined");
 }
 
-export const translate: lambda.APIGatewayProxyHandler = async (
+export const translate: lambda.APIGatewayProxyHandler = async function (
   event: lambda.APIGatewayProxyEvent,
   context: lambda.Context
-) => {
+) {
   try {
     if (!event.body) {
       throw new Error("body is empty");
@@ -72,30 +73,12 @@ export const translate: lambda.APIGatewayProxyHandler = async (
       TableName: TABLE_NAME,
       Item: marshall(dto),
     };
+
     await dynamodbClient.send(new dynamodb.PutItemCommand(tableInsertCmd));
 
-    return {
-      statusCode: 200,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": true,
-        "Access-Control-Allow-Methods": "POST, OPTIONS",
-        "Access-Control-Allow-Headers": "Content-Type, Authorization",
-      },
-      body: JSON.stringify(response),
-    };
+    return gateway.createSuccessJsonResponse(response);
   } catch (e: any) {
-    console.error(e);
-    return {
-      statusCode: 500,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": true,
-        "Access-Control-Allow-Methods": "POST, OPTIONS",
-        "Access-Control-Allow-Headers": "Content-Type, Authorization",
-      },
-      body: JSON.stringify(e.toString()),
-    };
+    return gateway.createErrorJsonResponse(e);
   }
 };
 
@@ -122,29 +105,9 @@ export const getTranslations: lambda.APIGatewayProxyHandler = async (
       console.log(item);
       return unmarshall(item) as TranslateDbObject;
     });
-    console.log(records);
 
-    return {
-      statusCode: 200,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": true,
-        "Access-Control-Allow-Methods": "POST, OPTIONS",
-        "Access-Control-Allow-Headers": "Content-Type, Authorization",
-      },
-      body: JSON.stringify(records),
-    };
+    return gateway.createSuccessJsonResponse(records);
   } catch (e: any) {
-    console.error(e);
-    return {
-      statusCode: 500,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": true,
-        "Access-Control-Allow-Methods": "POST, OPTIONS",
-        "Access-Control-Allow-Headers": "Content-Type, Authorization",
-      },
-      body: JSON.stringify(e.toString()),
-    };
+    return gateway.createErrorJsonResponse(e);
   }
 };

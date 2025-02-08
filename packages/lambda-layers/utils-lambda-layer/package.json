@@ -1,11 +1,10 @@
 {
-  "name": "utils-lambda-layer",
+  "name": "@a2t/utils-lambda-layer",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "./nodejs/utils-lambda-layer/index.js",
+  "types": "./nodejs/utils-lambda-layer/index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "license": "ISC",
-  "description": ""
+    "build": "tsc",
+    "watch": "tsc --watch"
+  }
 }
