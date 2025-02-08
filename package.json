@@ -9,7 +9,8 @@
   "scripts": {
     "frontend": "npm run dev --workspace frontend",
     "deploy": "cd infrastructure; npx cdk deploy --require-approval never ApiStack --profile development",
-    "build-utils-lambda-layer": "npm run build --workspace @a2t/utils-lambda-layer"
+    "build-utils-lambda-layer": "npm run build --workspace @a2t/utils-lambda-layer",
+    "watch-utils-lambda-layer": "npm run watch --workspace @a2t/utils-lambda-layer"
   },
   "devDependencies": {
     "@aws-sdk/client-dynamodb": "^3.743.0"

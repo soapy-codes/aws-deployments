@@ -13,10 +13,25 @@ export class ApiStack extends cdk.Stack {
 
     const projectRoot = "../";
     const lambdasDirPath = path.join(projectRoot, "packages/lambda");
+    const lambdaLayersDirPath = path.join(
+      projectRoot,
+      "packages/lambda-layers"
+    );
 
     const translateLambdaPath = path.resolve(
       path.join(lambdasDirPath, "translate/index.ts")
     );
+    const utilsLambdaLayerPath = path.resolve(
+      path.join(lambdaLayersDirPath, "utils-lambda-layer")
+    );
+
+    console.log(utilsLambdaLayerPath);
+
+    const utilsLambdaLayer = new lambda.LayerVersion(this, "utilsLambdaLayer", {
+      code: lambda.Code.fromAsset(utilsLambdaLayerPath),
+      compatibleRuntimes: [lambda.Runtime.NODEJS_20_X],
+      removalPolicy: cdk.RemovalPolicy.DESTROY,
+    });
 
     //DynamoDb construct
     const table = new dynamodb.Table(this, "translations", {
@@ -63,6 +78,7 @@ export class ApiStack extends cdk.Stack {
             "--tree-shaking": "true",
           },
         },
+        layers: [utilsLambdaLayer],
         initialPolicy: [translateAccessPolicy, dynamodbAccessPolicy],
         environment: {
           TABLE_NAME: table.tableName,
@@ -89,6 +105,7 @@ export class ApiStack extends cdk.Stack {
             "--tree-shaking": "true",
           },
         },
+        layers: [utilsLambdaLayer],
         initialPolicy: [dynamodbAccessPolicy],
         environment: {
           TABLE_NAME: table.tableName,
