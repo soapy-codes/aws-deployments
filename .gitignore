@@ -1,3 +1,6 @@
+# any env
+
+**.env*
 # CDK build outputs
 cdk.out
 

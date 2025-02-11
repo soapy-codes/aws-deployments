@@ -15,9 +15,7 @@ export class TranslationTable {
   }) {
     this.tableName = tableName;
     this.partitionKey = partitionKey;
-    this.dynamodbClient = new dynamodb.DynamoDBClient({
-      region: "us-east-2",
-    });
+    this.dynamodbClient = new dynamodb.DynamoDBClient();
   }
 
   insert = async (dto: TranslateDbObject) => {

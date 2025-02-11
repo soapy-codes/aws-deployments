@@ -9,8 +9,8 @@
   "scripts": {
     "frontend:dev": "npm run dev --workspace @a2t/frontend",
     "frontend:build": "npm run build --workspace @a2t/frontend",
-    "cdk:deploy": "cd infrastructure; npx cdk deploy --require-approval never ApiStack --profile development",
-    "cdk:destroy": "cd infrastructure; npx cdk destroy --require-approval never ApiStack --profile development",
+    "cdk:deploy": "cd infrastructure; npx cdk deploy --require-approval never TranslatorService --profile development",
+    "cdk:destroy": "cd infrastructure; npx cdk destroy --require-approval never TranslatorService --profile development",
     "lambda-layer:build-utils": "npm run build --workspace @a2t/utils-lambda-layer",
     "lambda-layer:watch-utils": "npm run watch --workspace @a2t/utils-lambda-layer"
   },

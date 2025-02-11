@@ -6,9 +6,7 @@ export async function getTranslation({
   targetLang,
   sourceText,
 }: TranslateRequest) {
-  const translateClient = new clientTranslate.TranslateClient({
-    region: "us-east-2",
-  });
+  const translateClient = new clientTranslate.TranslateClient();
   const translateCmd = new clientTranslate.TranslateTextCommand({
     SourceLanguageCode: sourceLang,
     TargetLanguageCode: targetLang,
