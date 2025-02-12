@@ -9,7 +9,13 @@ export interface TranslateResponse {
   targetText: string;
 }
 
-export type TranslateDbObject = TranslateRequest &
-  TranslateResponse & {
-    requestId: string;
-  };
+export interface TranslatePrimaryKey {
+  username: string;
+  requestId: string;
+}
+
+export type TranslateResult = TranslateRequest &
+  TranslateResponse &
+  TranslatePrimaryKey;
+
+export type TranslateResultList = Array<TranslateResult>;

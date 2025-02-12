@@ -25,6 +25,10 @@ export class TranslationService extends Construct {
     const table = new dynamodb.Table(this, "translations", {
       tableName: "translation",
       partitionKey: {
+        name: "username",
+        type: dynamodb.AttributeType.STRING,
+      },
+      sortKey: {
         name: "requestId",
         type: dynamodb.AttributeType.STRING,
       },
@@ -41,6 +45,7 @@ export class TranslationService extends Construct {
         "dynamodb:GetItem",
         "dynamodb:DeleteItem",
         "dynamodb:Scan",
+        "dynamodb:Query",
       ],
       resources: ["*"],
     });
@@ -51,19 +56,24 @@ export class TranslationService extends Construct {
       removalPolicy: cdk.RemovalPolicy.DESTROY,
     });
 
+    const environment = {
+      TABLE_NAME: table.tableName,
+      TRANSLATION_PARTITION_KEY: "username",
+      TRANSLATION_SORT_KEY: "requestId",
+    };
+
     const translateLambda = createNodeJsLambda(this, "translateLambda", {
       lambdaRelPath: "translate/index.ts",
-      handler: "translate",
+      handler: "userTranslate",
       lambdaLayers: [utilsLambdaLayer],
       initialPolicy: [translateAccessPolicy, dynamodbAccessPolicy],
-      environment: {
-        TABLE_NAME: table.tableName,
-        TRANSLATION_PARTITION_KEY: "requestId",
-      },
+      environment,
     });
     restApi.addTranslateMethod({
+      resource: restApi.userResource,
       httpMethod: "POST",
       lambda: translateLambda,
+      isAuth: true,
     });
 
     const getTranslationsLambda = createNodeJsLambda(
@@ -71,18 +81,53 @@ export class TranslationService extends Construct {
       "getTranslationsLambda",
       {
         lambdaRelPath: "translate/index.ts",
-        handler: "getTranslations",
+        handler: "getUserTranslations",
         lambdaLayers: [utilsLambdaLayer],
         initialPolicy: [dynamodbAccessPolicy],
-        environment: {
-          TABLE_NAME: table.tableName,
-          TRANSLATION_PARTITION_KEY: "requestId",
-        },
+        environment,
       }
     );
     restApi.addTranslateMethod({
+      resource: restApi.userResource,
       httpMethod: "GET",
       lambda: getTranslationsLambda,
+      isAuth: true,
+    });
+
+    const deleteTranslationLambda = createNodeJsLambda(
+      this,
+      "deleteTranslationLambda",
+      {
+        lambdaRelPath: "translate/index.ts",
+        handler: "deleteUserTranslation",
+        lambdaLayers: [utilsLambdaLayer],
+        initialPolicy: [dynamodbAccessPolicy],
+        environment,
+      }
+    );
+    restApi.addTranslateMethod({
+      resource: restApi.userResource,
+      httpMethod: "DELETE",
+      lambda: deleteTranslationLambda,
+      isAuth: true,
+    });
+
+    const publicTranslationLambda = createNodeJsLambda(
+      this,
+      "publicTranslationLambda",
+      {
+        lambdaRelPath: "translate/index.ts",
+        handler: "publicTranslate",
+        lambdaLayers: [utilsLambdaLayer],
+        initialPolicy: [translateAccessPolicy],
+        environment,
+      }
+    );
+    restApi.addTranslateMethod({
+      resource: restApi.publicResource,
+      httpMethod: "POST",
+      lambda: publicTranslationLambda,
+      isAuth: false,
     });
   }
 }

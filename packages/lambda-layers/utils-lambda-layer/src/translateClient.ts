@@ -1,11 +1,12 @@
 import * as clientTranslate from "@aws-sdk/client-translate";
 import { TranslateRequest } from "@a2t/shared-types";
+import { MissingProperty } from "./appExceptions";
 
 export async function getTranslation({
   sourceLang,
   targetLang,
   sourceText,
-}: TranslateRequest) {
+}: TranslateRequest): Promise<string> {
   const translateClient = new clientTranslate.TranslateClient();
   const translateCmd = new clientTranslate.TranslateTextCommand({
     SourceLanguageCode: sourceLang,
@@ -13,5 +14,11 @@ export async function getTranslation({
     Text: sourceText,
   });
 
-  return await translateClient.send(translateCmd);
+  const result = await translateClient.send(translateCmd);
+
+  if (!result.TranslatedText) {
+    throw new MissingProperty("TranslatedText");
+  }
+
+  return result.TranslatedText;
 }
