@@ -16,6 +16,9 @@ jobs:
       CDK_DEFAULT_REGION: ${{ secrets.CDK_DEFAULT_REGION }}
       AWS_REGION: ${{ secrets.CDK_DEFAULT_REGION }}
       AWS_ACCOUNT_ID: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
+      DOMAIN: ${{ vars.DOMAIN }}
+      API_SUBDOMAIN: "api"
+      WEB_SUBDOMAIN: "www"
     runs-on: ubuntu-latest
     steps:
       - env:
