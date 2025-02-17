@@ -38,7 +38,7 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
       - name: Synthesize CloudFormation Template
         id: synth
-        run: echo "building..."
+        run: "npm run ci:cdk-build"
       - name: Validate CloudFormation Template
         id: validate
         run: echo "validated"
