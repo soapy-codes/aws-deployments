@@ -91,7 +91,7 @@ export class ActionsStack extends cdk.Stack {
       managedPolicies: [
         iam.ManagedPolicy.fromAwsManagedPolicyName("AdministratorAccess"),
       ],
-      roleName: "github-role",
+      roleName: "github-actions",
     });
 
     new cdk.CfnOutput(this, "GitHubActionsRoleArn", {
