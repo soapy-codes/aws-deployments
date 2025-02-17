@@ -3,8 +3,11 @@ import { Construct } from "constructs";
 import * as s3 from "aws-cdk-lib/aws-s3";
 import * as iam from "aws-cdk-lib/aws-iam";
 
+export interface ActionStackProps extends cdk.StackProps {
+  subjectClaim: string;
+}
 export class ActionsStack extends cdk.Stack {
-  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+  constructor(scope: Construct, id: string, props: ActionStackProps) {
     super(scope, id, props);
 
     const oidcProvider = new iam.OpenIdConnectProvider(
@@ -71,24 +74,30 @@ export class ActionsStack extends cdk.Stack {
     //   assignSids: true,
     // });
 
-    const roleForGitHubActions = new iam.Role(this, "RoleForGitHubActions", {
+    const gitHubActionsRole = new iam.Role(this, "GitHubActionsRole", {
       assumedBy: new iam.WebIdentityPrincipal(
         oidcProvider.openIdConnectProviderArn,
         {
           StringEquals: {
             "token.actions.githubusercontent.com:aud": "sts.amazonaws.com",
-            "token.actions.githubusercontent.com:sub":
-              "repo:soapy-codes/aws-deployments:environment:development",
+            "token.actions.githubusercontent.com:sub": props.subjectClaim,
           },
         }
       ),
       //   inlinePolicies: {
       //     AccessAnalyzerPermissionsPolicy: accessAnalyzerPermissionsPolicy,
-      //   },
+      //   },               "repo:soapy-codes/aws-deployments:environment:development",
+
       managedPolicies: [
         iam.ManagedPolicy.fromAwsManagedPolicyName("AdministratorAccess"),
       ],
       roleName: "github-role",
+    });
+
+    new cdk.CfnOutput(this, "GitHubActionsRoleArn", {
+      value: gitHubActionsRole.roleArn,
+      description: "Role for GitHub Actions to perform deployments",
+      exportName: "GitHubActionsRoleArn",
     });
   }
 }
