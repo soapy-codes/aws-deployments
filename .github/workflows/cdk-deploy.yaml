@@ -15,6 +15,7 @@ jobs:
       CDK_DEFAULT_ACCOUNT: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
       CDK_DEFAULT_REGION: ${{ secrets.CDK_DEFAULT_REGION }}
       AWS_REGION: ${{ secrets.CDK_DEFAULT_REGION }}
+      AWS_ACCOUNT_ID: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
     runs-on: ubuntu-latest
     steps:
       - env:
