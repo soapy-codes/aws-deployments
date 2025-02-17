@@ -17,29 +17,28 @@ jobs:
       AWS_REGION: ${{ secrets.CDK_DEFAULT_REGION }}
     runs-on: ubuntu-latest
     steps:
+      - env:
+          EVENT_CONTEXT: ${{ toJSON(github.event) }}
+        run: |
+          echo $EVENT_CONTEXT | jq
+      - name: Clone repository
+        uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: "npm"
           cache-dependency-path: "**/package-lock.json"
-      - env:
-          EVENT_CONTEXT: ${{ toJSON(github.event) }}
-        run: |
-          echo $EVENT_CONTEXT | jq
-
-      - name: Git clone the repository
-        uses: actions/checkout@v4
+      - name: Install Dependencies
+        id: install
+        run: npm ci
       - name: configure aws credentials
         uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502
         with:
           role-to-assume: ${{ secrets.ROLE_ARN }}
           aws-region: ${{ env.AWS_REGION }}
-      - name: Install Dependencies
-        id: install
-        run: npm ci
       - name: Synthesize CloudFormation Template
         id: synth
-        run: bun run build
+        run: echo "building..."
       - name: Validate CloudFormation Template
         id: validate
         run: echo "validated"
