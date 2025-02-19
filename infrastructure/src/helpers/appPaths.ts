@@ -2,9 +2,6 @@ import * as path from "path";
 import * as fs from "fs";
 
 const findRootEnv = (searchPath: string): string => {
-  if (process.env.CI) {
-    return process.env.GITHUB_WORKSPACE || "";
-  }
   if (searchPath === "/") {
     throw new Error("No .env file found");
   }
@@ -14,7 +11,13 @@ const findRootEnv = (searchPath: string): string => {
   return findRootEnv(path.join(searchPath, "../"));
 };
 
-export const projectRootPath = findRootEnv(__dirname);
+let projectRoot: string = "";
+if (process.env.CI) {
+  projectRoot = process.env.GITHUB_WORKSPACE || "";
+} else {
+  projectRoot = findRootEnv(__dirname);
+}
+export const projectRootPath = projectRoot;
 export const projectEnvPath = path.join(projectRootPath, ".env");
 export const lambdasDirPath = path.join(projectRootPath, "packages/lambda");
 export const lambdaLayersDirPath = path.join(
