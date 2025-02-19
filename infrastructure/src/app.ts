@@ -10,16 +10,16 @@ const app = new cdk.App();
 new ActionsStack(app, "github-actions-stack", {
   stackName: "github-actions-stack",
   env: {
-    account: process.env.CDK_DEFAULT_ACCOUNT,
-    region: process.env.CDK_DEFAULT_REGION,
+    account: config.awsAccountId,
+    region: config.awsRegion,
   },
   subjectClaim: "repo:soapy-codes/aws-deployments:environment:development",
 });
 
-// new TranslatorServiceStack(app, "TranslatorService", {
-//   stackName: "TranslatorService",
-//   env: {
-//     account: config.awsAccountId,
-//     region: config.awsRegion,
-//   },
-// });
+new TranslatorServiceStack(app, "TranslatorService", {
+  stackName: "TranslatorService",
+  env: {
+    account: config.awsAccountId,
+    region: config.awsRegion,
+  },
+});
