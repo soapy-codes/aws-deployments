@@ -12,10 +12,10 @@ jobs:
   synth:
     environment: development
     env:
-      CDK_DEFAULT_ACCOUNT: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
-      CDK_DEFAULT_REGION: ${{ secrets.CDK_DEFAULT_REGION }}
-      AWS_REGION: ${{ secrets.CDK_DEFAULT_REGION }}
-      AWS_ACCOUNT_ID: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+      AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+      CDK_DEFAULT_ACCOUNT: ${{ secrets.AWS_ACCOUNT_ID }}
+      CDK_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
       DOMAIN: ${{ vars.DOMAIN }}
       API_SUBDOMAIN: "api"
       WEB_SUBDOMAIN: "www"
