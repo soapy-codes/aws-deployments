@@ -2,6 +2,9 @@ import * as path from "path";
 import * as fs from "fs";
 
 const findRootEnv = (searchPath: string): string => {
+  if (process.env.CI) {
+    return process.env.GITHUB_WORKSPACE || searchPath;
+  }
   if (searchPath === "/") {
     throw new Error("No .env file found");
   }
