@@ -13,7 +13,7 @@ const findRootEnv = (searchPath: string): string => {
 
 let projectRoot: string = "";
 if (process.env.GITHUB_ACTIONS) {
-  projectRoot = process.env.GITHUB_WORKSPACE || "";
+  projectRoot = path.join(process.env.GITHUB_WORKSPACE || "", __dirname);
 } else {
   projectRoot = findRootEnv(__dirname);
 }
