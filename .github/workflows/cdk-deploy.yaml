@@ -32,6 +32,8 @@ jobs:
           node-version: 20
           cache: "npm"
           cache-dependency-path: "**/package-lock.json"
+      - name: Install esbuild
+        run: npm install -g esbuild
       - name: Install Dependencies
         id: install
         run: npm ci
