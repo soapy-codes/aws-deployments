@@ -64,7 +64,7 @@ const TranslateRequestForm: React.FC = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div>
+      <div className="space-y-2">
         <Label htmlFor="sourceText">Input Text</Label>
         <Textarea
           id="sourceText"
@@ -73,43 +73,50 @@ const TranslateRequestForm: React.FC = () => {
         />
         {errors.sourceText && <span>field is required</span>}
       </div>
-      <div>
-        <Label htmlFor="sourceLang">Input Language</Label>
-        <Combobox
-          placeholder="language"
-          onSelect={(language) => {
-            setValue("sourceLang", language.value);
-          }}
-          options={options}
-          selected={
-            options.find((o) => o.value === selectedTranslation?.sourceLang) ||
-            null
-          }
-        />
-        {errors.sourceLang && <span>field is required</span>}
+      <div className="flex flex-col sm:flex-row justify-center sm:gap-24 gap-4 m-4">
+        <div className="flex-1 flex flex-col gap-2 items-center sm:items-center text-center max-w-[200px]">
+          <Label htmlFor="sourceLang" className="font-semibold">
+            Input Language
+          </Label>
+          <Combobox
+            placeholder="language"
+            onSelect={(language) => {
+              setValue("sourceLang", language.value);
+            }}
+            options={options}
+            selected={
+              options.find(
+                (o) => o.value === selectedTranslation?.sourceLang
+              ) || null
+            }
+          />
+          {errors.sourceLang && <span>field is required</span>}
+        </div>
+        <div className="flex-1 flex flex-col gap-2 items-center sm:items-center text-center max-w-[200px]">
+          <Label htmlFor="targetLang" className="font-semibold">
+            Output Language
+          </Label>
+          <Combobox
+            placeholder="language"
+            onSelect={(language) => {
+              setValue("targetLang", language.value);
+            }}
+            options={options}
+            selected={
+              options.find(
+                (o) => o.value === selectedTranslation?.targetLang
+              ) || null
+            }
+          />
+          {errors.targetLang && <span>field is required</span>}
+        </div>
       </div>
-      <div>
-        <Label htmlFor="targetLang">Output Language</Label>
-        <Combobox
-          placeholder="language"
-          onSelect={(language) => {
-            setValue("targetLang", language.value);
-          }}
-          options={options}
-          selected={
-            options.find((o) => o.value === selectedTranslation?.targetLang) ||
-            null
-          }
-        />
-        {errors.targetLang && <span>field is required</span>}
-      </div>
-      <div className="py-2">
-        <Button type="submit" className="w-full font-semibold">
+      <div className="flex justify-center w-full m-2">
+        <Button type="submit" className="font-semibold w-3/4 justify-center">
           {isTranslating ? <Loading /> : "Translate"}
         </Button>
       </div>
-
-      <div>
+      <div className="space-y-2">
         <Label htmlFor="targetText">Translated Text</Label>
         <Textarea
           readOnly
