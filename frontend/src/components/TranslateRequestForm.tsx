@@ -73,7 +73,7 @@ const TranslateRequestForm: React.FC = () => {
         />
         {errors.sourceText && <span>field is required</span>}
       </div>
-      <div className="flex sm:flex-row sm:justify-center sm:gap-24 justify-around gap-4 m-4">
+      <div className="flex sm:flex-row sm:justify-center sm:gap-24 flex-col justify-around gap-4 m-4 items-center">
         <div className="flex-1 flex flex-col gap-2 items-center sm:items-center text-center max-w-[200px]">
           <Label htmlFor="sourceLang" className="font-semibold">
             Input Language
