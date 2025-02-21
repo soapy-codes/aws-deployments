@@ -37,10 +37,6 @@ jobs:
       - name: Install Dependencies
         id: install
         run: npm ci
-      - name: Debug workspace structure
-        run: |
-          pwd
-          ls -la frontend || echo "frontend directory not found"
       - name: Build Frontend
         run: npm run frontend:build
       - name: Build Lambda Layers

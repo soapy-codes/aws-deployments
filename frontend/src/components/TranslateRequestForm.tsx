@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useApp } from "./AppProvider";
 import { Loading } from "./ui/loading";
+import { Combobox } from "./ui/combobox";
 
 const TranslateRequestForm: React.FC = () => {
   const { isTranslating, translate } = useTranslate();
@@ -33,6 +34,34 @@ const TranslateRequestForm: React.FC = () => {
     translate(data);
   };
 
+  const options = [
+    {
+      value: "en",
+      label: "English",
+      data: 1,
+    },
+    {
+      value: "es",
+      label: "Spanish",
+      data: 2,
+    },
+    {
+      value: "fr",
+      label: "French",
+      data: 3,
+    },
+    {
+      value: "de",
+      label: "German",
+      data: 4,
+    },
+    {
+      value: "it",
+      label: "Italian",
+      data: 5,
+    },
+  ];
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div>
@@ -46,19 +75,31 @@ const TranslateRequestForm: React.FC = () => {
       </div>
       <div>
         <Label htmlFor="sourceLang">Input Language</Label>
-        <Input
-          id="sourceLang"
-          type="text"
-          {...register("sourceLang", { required: true })}
+        <Combobox
+          placeholder="language"
+          onSelect={(language) => {
+            setValue("sourceLang", language.value);
+          }}
+          options={options}
+          selected={
+            options.find((o) => o.value === selectedTranslation?.sourceLang) ||
+            null
+          }
         />
         {errors.sourceLang && <span>field is required</span>}
       </div>
       <div>
         <Label htmlFor="targetLang">Output Language</Label>
-        <Input
-          id="targetLang"
-          type="text"
-          {...register("targetLang", { required: true })}
+        <Combobox
+          placeholder="language"
+          onSelect={(language) => {
+            setValue("targetLang", language.value);
+          }}
+          options={options}
+          selected={
+            options.find((o) => o.value === selectedTranslation?.targetLang) ||
+            null
+          }
         />
         {errors.targetLang && <span>field is required</span>}
       </div>
